@@ -36,13 +36,17 @@
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.menuItem6 = new System.Windows.Forms.MenuItem();
+            this.menuItem7 = new System.Windows.Forms.MenuItem();
+            this.menuItem8 = new System.Windows.Forms.MenuItem();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.statusBar1 = new System.Windows.Forms.StatusBar();
-            this.menuItem7 = new System.Windows.Forms.MenuItem();
-            this.menuItem8 = new System.Windows.Forms.MenuItem();
+            this.menuItem9 = new System.Windows.Forms.MenuItem();
+            this.menuItem10 = new System.Windows.Forms.MenuItem();
+            this.menuItem11 = new System.Windows.Forms.MenuItem();
+            this.menuItem12 = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -54,6 +58,8 @@
             // menuItem1
             // 
             this.menuItem1.MenuItems.Add(this.menuItem2);
+            this.menuItem1.MenuItems.Add(this.menuItem9);
+            this.menuItem1.MenuItems.Add(this.menuItem12);
             this.menuItem1.Text = "邪恶的大鲵";
             // 
             // menuItem2
@@ -82,6 +88,16 @@
             // 
             this.menuItem6.Text = "Async GET";
             this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
+            // 
+            // menuItem7
+            // 
+            this.menuItem7.MenuItems.Add(this.menuItem8);
+            this.menuItem7.Text = "Thread测试";
+            // 
+            // menuItem8
+            // 
+            this.menuItem8.Text = "可怕的触手之一";
+            this.menuItem8.Click += new System.EventHandler(this.menuItem8_Click);
             // 
             // textBox1
             // 
@@ -116,27 +132,38 @@
             // 
             // statusBar1
             // 
-            this.statusBar1.Location = new System.Drawing.Point(0, 431);
+            this.statusBar1.Location = new System.Drawing.Point(0, 307);
             this.statusBar1.Name = "statusBar1";
-            this.statusBar1.Size = new System.Drawing.Size(638, 24);
+            this.statusBar1.Size = new System.Drawing.Size(614, 24);
             this.statusBar1.Text = "statusBar1";
             // 
-            // menuItem7
+            // menuItem9
             // 
-            this.menuItem7.MenuItems.Add(this.menuItem8);
-            this.menuItem7.Text = "Thread测试";
+            this.menuItem9.MenuItems.Add(this.menuItem10);
+            this.menuItem9.MenuItems.Add(this.menuItem11);
+            this.menuItem9.Text = "JSON Test";
             // 
-            // menuItem8
+            // menuItem10
             // 
-            this.menuItem8.Text = "可怕的触手之一";
-            this.menuItem8.Click += new System.EventHandler(this.menuItem8_Click);
+            this.menuItem10.Text = "Parse JSON";
+            this.menuItem10.Click += new System.EventHandler(this.menuItem10_Click);
+            // 
+            // menuItem11
+            // 
+            this.menuItem11.Text = "Parse Mono";
+            this.menuItem11.Click += new System.EventHandler(this.menuItem11_Click);
+            // 
+            // menuItem12
+            // 
+            this.menuItem12.Text = "Next";
+            this.menuItem12.Click += new System.EventHandler(this.menuItem12_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(638, 455);
+            this.ClientSize = new System.Drawing.Size(318, 295);
             this.Controls.Add(this.statusBar1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -165,6 +192,10 @@
         private System.Windows.Forms.StatusBar statusBar1;
         private System.Windows.Forms.MenuItem menuItem7;
         private System.Windows.Forms.MenuItem menuItem8;
+        private System.Windows.Forms.MenuItem menuItem9;
+        private System.Windows.Forms.MenuItem menuItem10;
+        private System.Windows.Forms.MenuItem menuItem11;
+        private System.Windows.Forms.MenuItem menuItem12;
     }
 }
 

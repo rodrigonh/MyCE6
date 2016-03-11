@@ -9,6 +9,9 @@ using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Utilities;
 
 namespace SmartDeviceProject1
 {
@@ -23,7 +26,7 @@ namespace SmartDeviceProject1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("观测到输入的文本是："+this.textBox1.Text);
+            MessageBox.Show("观测到输入的文本是：" + this.textBox1.Text);
         }
 
         private void menuItem2_Click(object sender, EventArgs e)
@@ -35,7 +38,7 @@ namespace SmartDeviceProject1
         {
             string userName = "userName";
             string tagUrl = "https://freedom.everstray.com/";
-            EasyNeter easy_neter=new EasyNeter();
+            EasyNeter easy_neter = new EasyNeter();
             //CookieCollection cookies = new CookieCollection();//如何从response.Headers["Set-Cookie"];中获取并设置CookieCollection的代码略  
             HttpWebResponse response = easy_neter.getHttp(tagUrl);//.CreateGetHttpResponse(tagUrl, null, null, cookies);
             this.textBox1.Text = "Http Status Code = " + response.StatusCode;
@@ -66,8 +69,8 @@ namespace SmartDeviceProject1
             state.Add("target", this);
             state.Add("url", tagUrl);
 
-            bool async_gone=EasyAsync.register(new WaitCallback(Form1.callback_1),state);
-            this.textBox1.Text=(async_gone?"Async Begins...":"Async failed to begin!");
+            bool async_gone = EasyAsync.register(new WaitCallback(Form1.callback_1), state);
+            this.textBox1.Text = (async_gone ? "Async Begins..." : "Async failed to begin!");
         }
 
         private static void callback_1(object state)
@@ -93,7 +96,7 @@ namespace SmartDeviceProject1
                 String content = sr.ReadToEnd();
                 form.label2.Text = content;
                 */
-                
+
             }
             catch (Exception e)
             {
@@ -101,7 +104,7 @@ namespace SmartDeviceProject1
                 MessageBox.Show(e.StackTrace.ToString());
             }
         }
-        
+
         // 声明一个委托 
         private delegate void NewDel();
 
@@ -140,6 +143,59 @@ namespace SmartDeviceProject1
             StreamReader sr = new StreamReader(response.GetResponseStream());
             String content = sr.ReadToEnd();
             this.label2.Text = content;
+        }
+
+        private void menuItem10_Click(object sender, EventArgs e)
+        {
+            
+
+            string json = @"{
+                   'd': [
+                     {
+                       'Name': 'John Smith'
+                     },
+                     {
+                       'Name': 'Mike Smith'
+                     }
+                  ]
+                }";
+
+            JObject o = JObject.Parse(json);
+
+            this.label2.Text += o["d"].ToString();
+        }
+
+        private void menuItem11_Click(object sender, EventArgs e)
+        {
+            List<string> videogames = new List<string> { "Starcraft", "Halo", "Legend of Zelda" };
+            string json = JsonConvert.SerializeObject(videogames);
+            this.label2.Text += (json);
+
+            Dictionary<string, int> points = new Dictionary<string, int>{
+                { "James", 9001 },
+                { "Jo", 3474 },
+                { "Jess", 11926 }
+            };
+
+            json = JsonConvert.SerializeObject(points, Formatting.Indented);
+
+            this.label2.Text += (json);
+
+            JArray array = new JArray();
+            array.Add("Manual text");
+            array.Add(new DateTime(2000, 5, 23));
+
+            JObject o = new JObject();
+            o["MyArray"] = array;
+
+            json = o.ToString();
+            this.label2.Text += (json);
+        }
+
+        private void menuItem12_Click(object sender, EventArgs e)
+        {
+            Form2 f2 = new Form2();
+            f2.Show();
         }
     }
 }
