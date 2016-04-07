@@ -17,6 +17,48 @@ namespace LWMS_Alpha
         public Form1()
         {
             InitializeComponent();
+            
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            if (UserSessionAgent.token == null)
+            {
+                this.tb_username.Text = "";
+                this.tb_password.Text = "";
+                this.tb_username.Enabled = true;
+                this.tb_password.Enabled = true;
+                this.btn_login.Enabled = true;
+                this.btn_logout.Enabled = false;
+            }
+            else
+            {
+                this.tb_username.Text = UserSessionAgent.username;
+                this.tb_username.Enabled = false;
+                this.tb_password.Enabled = false;
+                this.btn_login.Enabled = false;
+                this.btn_logout.Enabled = true;
+            }
+
+            this.dataInit();
+        }
+
+        private void dataInit()
+        {
+            //初始化仓库
+            Dictionary<string, API.APIRE_PhysicalWarehouse> dict = API.APIWorker.getFacilityList();
+            if (dict != null && dict.Keys.Count > 0)
+            {
+                foreach (String key in dict.Keys)
+                {
+                    this.cb_facility.Items.Add(dict[key]);
+                }
+                this.cb_facility.SelectedIndex = 0;
+            }
+            else
+            {
+                MessageBox.Show("仓库列表获取不正常。", "初始化失败");
+            }
         }
 
         private void menuItem3_Click(object sender, EventArgs e)
@@ -46,13 +88,18 @@ namespace LWMS_Alpha
 
         private void btn_login_Click(object sender, EventArgs e)
         {
+            //MessageBox.Show(UserSessionAgent.machineCode(), "MAC");
             String info = "";
-            Boolean done=UserSessionAgent.login(this.tb_username.Text, this.tb_password.Text, out info);
+
+            API.APIRE_PhysicalWarehouse pw=(API.APIRE_PhysicalWarehouse)this.cb_facility.SelectedItem;
+
+            Boolean done=UserSessionAgent.login(pw.physical_warehouse_id,this.tb_username.Text, this.tb_password.Text, out info);
             if (done)
             {
                 this.tb_username.Enabled = false;
                 this.tb_password.Enabled = false;
                 this.btn_login.Enabled = false;
+                this.cb_facility.Enabled = false;
                 this.btn_logout.Enabled = true;
             }
             else
@@ -63,35 +110,20 @@ namespace LWMS_Alpha
 
         private void btn_logout_Click(object sender, EventArgs e)
         {
-            UserSessionAgent.logout();
-            this.tb_username.Text = "";
-            this.tb_password.Text = "";
-            this.tb_username.Enabled = true;
-            this.tb_password.Enabled = true;
-            this.btn_login.Enabled = true;
-            this.btn_logout.Enabled = false;
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            if (UserSessionAgent.token == null)
+            Boolean outed=UserSessionAgent.logout();
+            if (outed)
             {
                 this.tb_username.Text = "";
                 this.tb_password.Text = "";
                 this.tb_username.Enabled = true;
                 this.tb_password.Enabled = true;
                 this.btn_login.Enabled = true;
+                this.cb_facility.Enabled = true;
                 this.btn_logout.Enabled = false;
             }
-            else
-            {
-                this.tb_username.Text = UserSessionAgent.username;
-                this.tb_username.Enabled = false;
-                this.tb_password.Enabled = false;
-                this.btn_login.Enabled = false;
-                this.btn_logout.Enabled = true;
-            }
         }
+
+        
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -102,8 +134,6 @@ namespace LWMS_Alpha
                 tc.SelectedIndex = 0;
             }
         }
-
-
 
     }
 }

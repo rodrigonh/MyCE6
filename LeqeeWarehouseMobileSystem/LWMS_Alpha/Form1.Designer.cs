@@ -35,18 +35,20 @@
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPageWork = new System.Windows.Forms.TabPage();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabPageUser = new System.Windows.Forms.TabPage();
+            this.cb_facility = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.btn_logout = new System.Windows.Forms.Button();
             this.btn_login = new System.Windows.Forms.Button();
             this.tb_password = new System.Windows.Forms.TextBox();
             this.tb_username = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.tabPageWork = new System.Windows.Forms.TabPage();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabControl1.SuspendLayout();
-            this.tabPageWork.SuspendLayout();
             this.tabPageUser.SuspendLayout();
+            this.tabPageWork.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -85,6 +87,82 @@
             this.tabControl1.TabIndex = 0;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
+            // tabPageUser
+            // 
+            this.tabPageUser.Controls.Add(this.cb_facility);
+            this.tabPageUser.Controls.Add(this.label3);
+            this.tabPageUser.Controls.Add(this.btn_logout);
+            this.tabPageUser.Controls.Add(this.btn_login);
+            this.tabPageUser.Controls.Add(this.tb_password);
+            this.tabPageUser.Controls.Add(this.tb_username);
+            this.tabPageUser.Controls.Add(this.label2);
+            this.tabPageUser.Controls.Add(this.label1);
+            this.tabPageUser.Location = new System.Drawing.Point(4, 25);
+            this.tabPageUser.Name = "tabPageUser";
+            this.tabPageUser.Size = new System.Drawing.Size(304, 208);
+            this.tabPageUser.Text = "身份";
+            // 
+            // cb_facility
+            // 
+            this.cb_facility.Location = new System.Drawing.Point(63, 7);
+            this.cb_facility.Name = "cb_facility";
+            this.cb_facility.Size = new System.Drawing.Size(227, 23);
+            this.cb_facility.TabIndex = 8;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(12, 11);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(56, 17);
+            this.label3.Text = "仓库：";
+            // 
+            // btn_logout
+            // 
+            this.btn_logout.Location = new System.Drawing.Point(15, 168);
+            this.btn_logout.Name = "btn_logout";
+            this.btn_logout.Size = new System.Drawing.Size(275, 31);
+            this.btn_logout.TabIndex = 5;
+            this.btn_logout.Text = "登出";
+            this.btn_logout.Click += new System.EventHandler(this.btn_logout_Click);
+            // 
+            // btn_login
+            // 
+            this.btn_login.Location = new System.Drawing.Point(15, 126);
+            this.btn_login.Name = "btn_login";
+            this.btn_login.Size = new System.Drawing.Size(276, 29);
+            this.btn_login.TabIndex = 4;
+            this.btn_login.Text = "登入";
+            this.btn_login.Click += new System.EventHandler(this.btn_login_Click);
+            // 
+            // tb_password
+            // 
+            this.tb_password.Location = new System.Drawing.Point(63, 84);
+            this.tb_password.Name = "tb_password";
+            this.tb_password.PasswordChar = '*';
+            this.tb_password.Size = new System.Drawing.Size(229, 23);
+            this.tb_password.TabIndex = 3;
+            // 
+            // tb_username
+            // 
+            this.tb_username.Location = new System.Drawing.Point(63, 47);
+            this.tb_username.Name = "tb_username";
+            this.tb_username.Size = new System.Drawing.Size(229, 23);
+            this.tb_username.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(12, 88);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 19);
+            this.label2.Text = "密码：";
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(12, 50);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(56, 17);
+            this.label1.Text = "用户：";
+            // 
             // tabPageWork
             // 
             this.tabPageWork.Controls.Add(this.listBox1);
@@ -102,66 +180,6 @@
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
-            // tabPageUser
-            // 
-            this.tabPageUser.Controls.Add(this.btn_logout);
-            this.tabPageUser.Controls.Add(this.btn_login);
-            this.tabPageUser.Controls.Add(this.tb_password);
-            this.tabPageUser.Controls.Add(this.tb_username);
-            this.tabPageUser.Controls.Add(this.label2);
-            this.tabPageUser.Controls.Add(this.label1);
-            this.tabPageUser.Location = new System.Drawing.Point(4, 25);
-            this.tabPageUser.Name = "tabPageUser";
-            this.tabPageUser.Size = new System.Drawing.Size(304, 208);
-            this.tabPageUser.Text = "身份";
-            // 
-            // btn_logout
-            // 
-            this.btn_logout.Location = new System.Drawing.Point(15, 130);
-            this.btn_logout.Name = "btn_logout";
-            this.btn_logout.Size = new System.Drawing.Size(275, 31);
-            this.btn_logout.TabIndex = 5;
-            this.btn_logout.Text = "登出";
-            this.btn_logout.Click += new System.EventHandler(this.btn_logout_Click);
-            // 
-            // btn_login
-            // 
-            this.btn_login.Location = new System.Drawing.Point(15, 88);
-            this.btn_login.Name = "btn_login";
-            this.btn_login.Size = new System.Drawing.Size(276, 29);
-            this.btn_login.TabIndex = 4;
-            this.btn_login.Text = "登入";
-            this.btn_login.Click += new System.EventHandler(this.btn_login_Click);
-            // 
-            // tb_password
-            // 
-            this.tb_password.Location = new System.Drawing.Point(63, 46);
-            this.tb_password.Name = "tb_password";
-            this.tb_password.PasswordChar = '*';
-            this.tb_password.Size = new System.Drawing.Size(229, 23);
-            this.tb_password.TabIndex = 3;
-            // 
-            // tb_username
-            // 
-            this.tb_username.Location = new System.Drawing.Point(63, 9);
-            this.tb_username.Name = "tb_username";
-            this.tb_username.Size = new System.Drawing.Size(229, 23);
-            this.tb_username.TabIndex = 2;
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(12, 50);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 19);
-            this.label2.Text = "密码：";
-            // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(12, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 17);
-            this.label1.Text = "用户：";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -174,8 +192,8 @@
             this.Text = "Leqee WMS";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
-            this.tabPageWork.ResumeLayout(false);
             this.tabPageUser.ResumeLayout(false);
+            this.tabPageWork.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -196,6 +214,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btn_logout;
+        private System.Windows.Forms.ComboBox cb_facility;
+        private System.Windows.Forms.Label label3;
     }
 }
 
