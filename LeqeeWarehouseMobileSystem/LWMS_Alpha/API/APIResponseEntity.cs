@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -33,5 +34,24 @@ namespace LWMS_Alpha.API
         {
             return this.warehouse_name == null ? "" : this.warehouse_name;
         }
+    }
+
+    class APIRE_Package {
+
+        public int num;
+
+        public string way;
+
+        public List<APIRE_Ship> list;
+    
+    }
+
+    class APIRE_Ship {
+
+        public int shipping_id;
+        public string tracking_number;
+        public int shipment_id;
+        public string shipping_name;
+        public string order_id;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
@@ -23,6 +24,7 @@ namespace LWMS_Alpha.API
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 throw e;
                 //return new Dictionary<string, string>();
             }
@@ -40,5 +42,22 @@ namespace LWMS_Alpha.API
         {
             return API.APIWorkerImpl.appLogout();
         }
+
+        public static API.APIRE_Package getCheckPalletSn(String matuo)
+        {
+            try
+            {
+                API.APIRE_Package apk = API.APIWorkerImpl.checkPalletSn(matuo);
+
+                return apk;
+
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }

@@ -77,6 +77,7 @@
             this.tb_package.Name = "tb_package";
             this.tb_package.Size = new System.Drawing.Size(202, 23);
             this.tb_package.TabIndex = 3;
+            this.tb_package.TextChanged += new System.EventHandler(this.tb_package_TextChanged);
             // 
             // statusBar1
             // 

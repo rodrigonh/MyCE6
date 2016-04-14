@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Net;
@@ -13,13 +14,15 @@ namespace LWMS_Alpha.API
 {
     class APIWorkerImpl
     {
+        //private static String api_root_url = "http://172.16.1.141:8080/wms/";
         private static String api_root_url = "http://www.leqeewechat.com:8080/wms/";
 
         public static String commonTest()
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("sid", (UserSessionAgent.token==null?"":UserSessionAgent.token));
-            HttpWebResponse response = NetworkAgent.theEN().postHttp("http://www.leqeewechat.com:8080/wms/appIndex", parameters, 30000, null, Encoding.UTF8);
+            int k = new Random().Next();
+            HttpWebResponse response = NetworkAgent.theEN().postHttp("http://www.leqeewechat.com:8080/wms/appIndex", parameters, 30000, "Sinri Variable UA-"+k, Encoding.UTF8);
             StreamReader sr = new StreamReader(response.GetResponseStream());
             String content = sr.ReadToEnd();
             return content;
@@ -28,30 +31,55 @@ namespace LWMS_Alpha.API
         private static String callApi(String api_sub_url, Dictionary<string, string> parameters,out HttpWebResponse response)
         {
             parameters.Add("sid", (UserSessionAgent.token == null ? "" : UserSessionAgent.token));
+
+            Console.WriteLine("CALL_API: " + (APIWorkerImpl.api_root_url + api_sub_url));
+            foreach (String key in parameters.Keys)
+            {
+                Console.WriteLine("param| " + key + " : " + parameters[key]);
+            }
+
             //HttpWebResponse 
             response = NetworkAgent.theEN().postHttp(APIWorkerImpl.api_root_url+api_sub_url, parameters, 30000, null, Encoding.UTF8);
             StreamReader sr = new StreamReader(response.GetResponseStream());
             String content = sr.ReadToEnd();
+            
+            Console.WriteLine(content);
+            
             return content;
         }
 
         private static JObject processJSON(String json,out String errCode)
         {
             JObject o = JObject.Parse(json);
-            //Console.WriteLine(o["result"]);
-            //Console.WriteLine(o["result"].Value<String>());
-            //Console.WriteLine("EQUAL? " + o["result"].Value<String>().Equals("success"));
-            if (o["result"].Value<String>().Equals("success"))
+            Console.WriteLine(o);
+            Console.WriteLine(o["success"]);
+            Console.WriteLine(o["success"].Value<Boolean>());
+            //if (o["result"].Value<String>().Equals("success"))
+            if (o["success"].Value<Boolean>())
             {
-                //Console.WriteLine("process JSON as "+o);
+                Console.WriteLine("success confirmed");
                 errCode = "0000";
                 return o;
             }
             else
             {
-                //Console.WriteLine("process JSON errorCode");
-                errCode=o["errorCode"].ToString();
-                //Console.WriteLine("process JSON errorCode = " + errCode);
+                Console.WriteLine("failed confirmed");
+                JToken token = null;
+                if (o.TryGetValue("errorCode", out token))
+                {
+                    errCode = token.Value<String>(); 
+                }
+                else
+                {
+                    if (o.TryGetValue("error", out token))
+                    {
+                        errCode = token.Value<String>(); 
+                    }
+                    else
+                    {
+                        errCode = "Unknown Error";
+                    }
+                }
                 return null;
             }
         }
@@ -63,8 +91,6 @@ namespace LWMS_Alpha.API
                 string tagUrl = "appIndex";
 
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
-                //parameters.Add("str1", "apple");
-                //parameters.Add("str2", "pear");
 
                 HttpWebResponse response = null;
 
@@ -96,6 +122,8 @@ namespace LWMS_Alpha.API
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
                 throw e;
             }
         }
@@ -114,7 +142,7 @@ namespace LWMS_Alpha.API
 
                 HttpWebResponse response = null;
                 String json = APIWorkerImpl.callApi(url, parameters, out response);
-                //Console.WriteLine(json);
+                Console.WriteLine(json);
                 errCode = "0000";
                 JObject obj = APIWorkerImpl.processJSON(json, out errCode);
                 if (obj != null)
@@ -161,5 +189,59 @@ namespace LWMS_Alpha.API
                 return false;
             }
         }
+
+
+        public static API.APIRE_Package checkPalletSn(String matuo)
+        {
+            try
+            {
+                String url = "shippment/checkPalletSn";
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters.Add("pallet_sn", matuo);
+
+                HttpWebResponse response = null;
+                //HttpWebResponse 
+                String json = APIWorkerImpl.callApi(url, parameters, out response);
+                
+                String errCode = "0000";
+                JObject obj = APIWorkerImpl.processJSON(json,out errCode);
+
+                if (obj != null)
+                {
+                    ArrayList list = new ArrayList();
+
+                    API.APIRE_Package apk = new APIRE_Package();   
+          
+                    JArray array = (JArray)obj["ship"];
+
+                    apk.num = (obj["num"].Value<int>());
+                    Console.WriteLine(obj["num"].Value<int>());
+                    for (int i = 0; i < array.Count; i++)
+                    {
+                        APIRE_Ship s = new APIRE_Ship();
+                        s.tracking_number = array[i].Value<String>("tracking_number");
+                        
+                        s.shipping_name = array[i].Value<String>("shipping_name");
+
+                        apk.list.Add(s);
+                    }
+                    return apk;
+
+                }
+                else
+                {
+                    throw new Exception("该托盘条码不存在!");
+                }
+
+
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                throw e;
+            }
+        }
     }
+
 }

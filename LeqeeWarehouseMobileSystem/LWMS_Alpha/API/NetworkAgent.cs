@@ -50,7 +50,8 @@ namespace LWMS_Alpha.API
 
     public class EasyNeter : ICertificatePolicy
     {
-        private static readonly string DefaultUserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
+        private static readonly string DefaultUserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36";
+            //"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
         public HttpWebResponse getHttp(String url)
         {
             if (string.IsNullOrEmpty(url))
@@ -90,7 +91,7 @@ namespace LWMS_Alpha.API
             }
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
-
+            /*
             if (!string.IsNullOrEmpty(userAgent))
             {
                 request.UserAgent = userAgent;
@@ -99,7 +100,7 @@ namespace LWMS_Alpha.API
             {
                 request.UserAgent = DefaultUserAgent;
             }
-
+            */
             if (timeout.HasValue)
             {
                 request.Timeout = timeout.Value;

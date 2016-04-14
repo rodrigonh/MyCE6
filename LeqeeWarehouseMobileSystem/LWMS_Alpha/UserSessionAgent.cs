@@ -13,7 +13,6 @@ namespace LWMS_Alpha
 
         public static String machineCode()
         {
-           //return  libGetAdaptersInfo.myMac();
             return MachineID.getMachineID();
         }
 
@@ -29,7 +28,7 @@ namespace LWMS_Alpha
 
             session_token = API.APIWorker.doLogin(facility_code, username, password, mid, out info);
 
-            //Console.WriteLine("session_token=" + session_token);
+            Console.WriteLine("session_token=" + session_token);
 
             if (session_token != null)
             {
