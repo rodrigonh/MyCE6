@@ -16,6 +16,7 @@ namespace LWMS_Alpha.API
     {
         //private static String api_root_url = "http://172.16.1.141:8080/wms/";
         private static String api_root_url = "http://www.leqeewechat.com:8080/wms/";
+        //private static String api_root_url = "http://www.leqeewechat.com/device/";
 
         public static String commonTest()
         {
@@ -23,28 +24,31 @@ namespace LWMS_Alpha.API
             parameters.Add("sid", (UserSessionAgent.token==null?"":UserSessionAgent.token));
             int k = new Random().Next();
             HttpWebResponse response = NetworkAgent.theEN().postHttp("http://www.leqeewechat.com:8080/wms/appIndex", parameters, 30000, "Sinri Variable UA-"+k, Encoding.UTF8);
+            //HttpWebResponse response = NetworkAgent.theEN().getHttp(url, parameters, 30000);
             StreamReader sr = new StreamReader(response.GetResponseStream());
             String content = sr.ReadToEnd();
             return content;
         }
 
-        private static String callApi(String api_sub_url, Dictionary<string, string> parameters,out HttpWebResponse response)
+        private static String callApi(String api_sub_url, Dictionary<string, string> parameters)
         {
             parameters.Add("sid", (UserSessionAgent.token == null ? "" : UserSessionAgent.token));
 
-            Console.WriteLine("CALL_API: " + (APIWorkerImpl.api_root_url + api_sub_url));
+            string url = (APIWorkerImpl.api_root_url + api_sub_url);// +".php";
+
+            Console.WriteLine("CALL_API: " + url);
             foreach (String key in parameters.Keys)
             {
                 Console.WriteLine("param| " + key + " : " + parameters[key]);
             }
 
-            //HttpWebResponse 
-            response = NetworkAgent.theEN().postHttp(APIWorkerImpl.api_root_url+api_sub_url, parameters, 30000, null, Encoding.UTF8);
+            HttpWebResponse  response = NetworkAgent.theEN().postHttp(url, parameters, 10*1000, null, Encoding.Default);
+            //response = NetworkAgent.theEN().getHttp(url, parameters, 30000);
             StreamReader sr = new StreamReader(response.GetResponseStream());
             String content = sr.ReadToEnd();
             
             Console.WriteLine(content);
-            
+            response.Close();
             return content;
         }
 
@@ -94,7 +98,7 @@ namespace LWMS_Alpha.API
 
                 HttpWebResponse response = null;
 
-                String json = APIWorkerImpl.callApi(tagUrl, parameters, out response);
+                String json = APIWorkerImpl.callApi(tagUrl, parameters);
 
                 String errCode = "0000";
                 JObject obj=APIWorkerImpl.processJSON(json,out errCode);
@@ -141,7 +145,7 @@ namespace LWMS_Alpha.API
                 parameters.Add("physical_warehouse_id", ("" + facility_code));
 
                 HttpWebResponse response = null;
-                String json = APIWorkerImpl.callApi(url, parameters, out response);
+                String json = APIWorkerImpl.callApi(url, parameters);
                 Console.WriteLine(json);
                 errCode = "0000";
                 JObject obj = APIWorkerImpl.processJSON(json, out errCode);
@@ -177,7 +181,7 @@ namespace LWMS_Alpha.API
                 String url = "appLogout";
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
                 HttpWebResponse response = null;
-                String json = APIWorkerImpl.callApi(url, parameters, out response);
+                String json = APIWorkerImpl.callApi(url, parameters);
                 String errCode = "0000";
                 JObject obj = APIWorkerImpl.processJSON(json, out errCode);
                 return (obj!=null);
@@ -196,12 +200,13 @@ namespace LWMS_Alpha.API
             try
             {
                 String url = "shippment/checkPalletSn";
+                //url = "checkPalletSn";
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
                 parameters.Add("pallet_sn", matuo);
 
                 HttpWebResponse response = null;
                 //HttpWebResponse 
-                String json = APIWorkerImpl.callApi(url, parameters, out response);
+                String json = APIWorkerImpl.callApi(url, parameters);
                 
                 String errCode = "0000";
                 JObject obj = APIWorkerImpl.processJSON(json,out errCode);

@@ -49,10 +49,11 @@ namespace LWMS_Alpha
         public static Boolean logout()
         {
             Boolean outed=API.APIWorker.doLogout();
-
-            UserSessionAgent.username = null;
-            UserSessionAgent.token = null;
-
+            if (outed)
+            {
+                UserSessionAgent.username = null;
+                UserSessionAgent.token = null;
+            }
             return outed;
         }
     }

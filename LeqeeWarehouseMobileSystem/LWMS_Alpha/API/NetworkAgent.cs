@@ -16,15 +16,16 @@ namespace LWMS_Alpha.API
 
         protected static EasyNeter EnInstance
         {
-          get { return NetworkAgent.enInstance; }
-          set { NetworkAgent.enInstance = value; }
+            get { return NetworkAgent.enInstance; }
+            set { NetworkAgent.enInstance = value; }
         }
 
         public static EasyNeter theEN()
         {
-            if(enInstance ==null){
-           enInstance=new EasyNeter();
-        }
+            //if (enInstance == null)
+            //{
+            enInstance = new EasyNeter();
+            //}
             return NetworkAgent.enInstance;
         }
 
@@ -51,12 +52,30 @@ namespace LWMS_Alpha.API
     public class EasyNeter : ICertificatePolicy
     {
         private static readonly string DefaultUserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36";
-            //"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
-        public HttpWebResponse getHttp(String url)
+        //"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
+        public HttpWebResponse getHttp(String url, IDictionary<string, string> parameters, int? timeout)
         {
             if (string.IsNullOrEmpty(url))
             {
                 throw new ArgumentNullException("url");
+            }
+            if (!(parameters == null || parameters.Count == 0))
+            {
+                StringBuilder buffer = new StringBuilder();
+                int i = 0;
+                foreach (string key in parameters.Keys)
+                {
+                    if (i > 0)
+                    {
+                        buffer.AppendFormat("&{0}={1}", key, parameters[key]);
+                    }
+                    else
+                    {
+                        buffer.AppendFormat("{0}={1}", key, parameters[key]);
+                    }
+                    i++;
+                }
+                url = url + "?" + (buffer.ToString());
             }
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             if (url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
@@ -66,7 +85,12 @@ namespace LWMS_Alpha.API
                 request.ProtocolVersion = HttpVersion.Version10;
             }
             request.Method = "GET";
-            request.UserAgent = DefaultUserAgent;
+            //request.UserAgent = DefaultUserAgent;
+            if (timeout.HasValue)
+            {
+                request.Timeout = timeout.Value;
+            }
+
             return request.GetResponse() as HttpWebResponse;
         }
 
@@ -101,10 +125,12 @@ namespace LWMS_Alpha.API
                 request.UserAgent = DefaultUserAgent;
             }
             */
+            /*
             if (timeout.HasValue)
             {
                 request.Timeout = timeout.Value;
             }
+             */
             //如果需要POST数据  
             if (!(parameters == null || parameters.Count == 0))
             {
@@ -123,12 +149,59 @@ namespace LWMS_Alpha.API
                     i++;
                 }
                 byte[] data = requestEncoding.GetBytes(buffer.ToString());
+                request.ContentLength = data.Length;
+                request.KeepAlive = true;
+                //request.ServicePoint.Expect100Continue=false;
+                //request.Accept = "*/*";
+                //request.AllowAutoRedirect = true;
+                request.AllowWriteStreamBuffering = false;
+
+
+
                 using (Stream stream = request.GetRequestStream())
                 {
+                    /*
+                    StreamWriter sw = null;
+                    try
+                    {
+                        sw = new StreamWriter(stream);
+                        sw.Write(buffer.ToString());
+                    }
+                    catch (Exception e1)
+                    {
+                        Console.WriteLine(e1.Message);
+                        Console.WriteLine(e1.StackTrace);
+                    }
+                    finally
+                    {
+                        sw.Close();
+                        sw = null;
+                    }
+                     */
                     stream.Write(data, 0, data.Length);
+                    stream.Close();
                 }
             }
-            return request.GetResponse() as HttpWebResponse;
+             HttpWebResponse response= null;
+            try
+            {
+                 response = request.GetResponse() as HttpWebResponse;
+                 return response;
+            }
+            catch (Exception eee)
+            {
+                Console.WriteLine(eee.Message);
+                Console.WriteLine(eee.StackTrace);
+                if (response != null)
+                {
+                    response.Close();
+                }
+                //throw eee;
+                return null;
+            }
+            finally{
+                
+            }
         }
 
         public bool CheckValidationResult(ServicePoint srvPoint, X509Certificate certificate, WebRequest request, int certificateProblem)
